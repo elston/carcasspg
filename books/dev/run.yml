@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+
+  # router:
+  #     image: carcasspg_router
+  #     expose:
+  #       - "80"    
+  #     ports:
+  #       - "80:80"
+  #     networks:
+  #       - netmain    
+  #     volumes:
+  #       - ../images/router/src:/router
+
+  storage:
+      image: carcasspg_storage
+      expose:
+        - "5432"
+      ports:
+        - "5432:5432"
+      networks:
+        - netmain
+      volumes:
+        - var_lib_postgresql_data:/var/lib/postgresql/data
+      # .............................................
+      restart: always
+
+  mediatry:
+      image: carcasspg_mediatry
+      tty: true      
+      expose:
+        - "8000"    
+      ports:
+        - "8000:8000"
+      networks:
+        - netmain   
+      depends_on:
+        - storage
+      environment:
+        - PROJECT=mediatry      
+        - WORKON_HOME=/mediatry/.env         
+        - DJANGO_SETTINGS_MODULE=settings.dev        
+      volumes:
+        - ../../images/mediatry/src:/mediatry
+      # .............................................        
+      restart: always        
+      command: /usr/local/bin/runserv.sh
+
+volumes:
+  var_lib_postgresql_data:
+
+networks:
+  netmain:
+    driver: bridge
+   

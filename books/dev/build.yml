@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  # router:
+  #     build:
+  #       context: ../images/router
+  #       dockerfile: Dockerfile.dev      
+  #     network_mode: "host"  
+
+
+  storage:
+      build:
+        context: ../../images/storage
+        dockerfile: Dockerfile.dev      
+      network_mode: "host" 
+      volumes:
+        - var_lib_postgresql_data:/var/lib/postgresql/data
+
+  mediatry:
+      build:
+        context: ../../images/mediatry
+        dockerfile: Dockerfile.dev      
+      network_mode: "host"  
+      environment:
+        - PROJECT=mediatry
+        - WORKON_HOME=/mediatry/.env 
+        - EXTREQ=dev
+      volumes:
+        - ../../images/mediatry/src:/mediatry
+
+volumes:
+  var_lib_postgresql_data:

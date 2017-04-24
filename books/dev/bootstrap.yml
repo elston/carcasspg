@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+
+  storage:
+      image: carcasspg_storage
+      network_mode: "host"
+      environment:
+        - POSTGRES_USER=mark
+        - POSTGRES_PASSWORD=zukerberg
+      volumes:
+        - var_lib_postgresql_data:/var/lib/postgresql/data
+
+  mediatry:
+      image: carcasspg_mediatry
+      network_mode: "host" 
+      environment:
+        - PROJECT=mediatry
+        - WORKON_HOME=/mediatry/.env 
+        - EXTREQ=dev        
+      volumes:
+        - ../../images/mediatry/src:/mediatry
+
+volumes:
+  var_lib_postgresql_data:
